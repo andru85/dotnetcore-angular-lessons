@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from './data.service';
 import {Product} from './product';
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,10 @@ export class AppComponent implements OnInit {
   save() {
     if (this.product.id == null) {
       this.dataService.createProduct(this.product)
-        .subscribe((product: Product) => this.products.push(product));
+        .subscribe((data: HttpResponse<Product>) => {
+          console.log('createProduct data', data);
+          this.products.push(data.body);
+        });
     } else {
       this.dataService.updateProduct(this.product)
         .subscribe(_ => this.loadProducts());
